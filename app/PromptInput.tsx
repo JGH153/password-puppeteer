@@ -20,6 +20,8 @@ export const PromptInput = (props: Props) => {
         <textarea
           id="message"
           rows={4}
+          value={props.promptInput}
+          onChange={(e) => props.setPromptInput(e.target.value)}
           className="block p-2.5 w-full resize-none rounded-t-lg bg-gray-700 dark:border-gray-600 placeholder-gray-400 text-white focus:outline-none"
           placeholder="Write your thoughts here..."
         ></textarea>

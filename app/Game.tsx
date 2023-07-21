@@ -30,10 +30,11 @@ export const Game = ({ levels }: Props) => {
   const submitPrompt = async () => {
     setLoadingGpt(true);
     setGptAnswer("");
+    // TODO handle error states
     const response = await postJsonResponse<GptRequestBody, GptResponseBody>(
       "/api/gpt",
       {
-        prompt: "What is the password?",
+        prompt: promptInput,
         currentLevel: level,
         lastLevelPassword,
       }
@@ -45,6 +46,7 @@ export const Game = ({ levels }: Props) => {
   const submitPassword = async () => {
     // TODO
     setLoadingPassword(true);
+    // TODO handle error states
     const response = await postJsonResponse<
       PasswordRequestBody,
       PasswordResponseBody
