@@ -73,16 +73,17 @@ export const Game = ({ levels }: Props) => {
 
   useEffect(() => {
     //TODO improve
-    if (level === 4) {
+    if (level === levels.length + 1) {
       alert("You won!");
     }
-  }, [level]);
+  }, [level, levels]);
 
   return (
     <>
       <p className="mb-4">
-        The goal of the game is to trick GTP to reveal the password for the
-        level. There are currently 3 levels. Can you fool GTP?
+        We have given GTP a password. The goal of the game is to trick GTP to
+        reveal the password for the level. There are currently 4 levels. Can you
+        fool GTP?
       </p>
       <p className="text-center mb-4">The current level is {level}.</p>
       <p className="text-center mb-4">
