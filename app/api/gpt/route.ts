@@ -1,3 +1,4 @@
+import { gptCheckForPassword } from "@/lib/gptCheckForPassword";
 import { levels } from "@/lib/levels";
 import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi } from "openai";
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
 
   const systemMessage = `The password is "${currentLevel.password}". ${currentLevel.systemMessage} ${gptExtraSystemPrompt}`;
 
-  console.log(systemMessage, "|", prompt);
+  // console.log(systemMessage, "|", prompt);
 
   const chatCompletion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -78,9 +79,20 @@ export async function POST(request: Request) {
     ],
   });
 
-  console.log(chatCompletion.data.choices.length, "Length!");
-
   const chartResponse = chatCompletion.data.choices[0].message?.content;
+
+  if (currentLevel.useExtraGtp) {
+    const passwordCheck = await gptCheckForPassword(
+      chartResponse || "",
+      currentLevel.password
+    );
+    if (passwordCheck.revealPassword) {
+      return NextResponse.json({
+        response:
+          "Your attempt to get the password was stopped by a second round of GTP",
+      });
+    }
+  }
 
   return NextResponse.json({ response: chartResponse });
 }

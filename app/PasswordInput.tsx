@@ -18,7 +18,9 @@ export const PasswordInput = (props: Props) => {
         placeholder="Secret password"
         required
       />
-      <Button onClick={props.onSubmitPassword}>Submit</Button>
+      <Button onClick={props.onSubmitPassword} greenButton={true}>
+        Submit
+      </Button>
     </div>
   );
 };

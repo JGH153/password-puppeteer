@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PasswordInput } from "./PasswordInput";
 import { PromptInput } from "./PromptInput";
 import { Spinner } from "@/components/Spinner";
@@ -28,6 +28,9 @@ export const Game = ({ levels }: Props) => {
   const [lastLevelPassword, setLastLevelPassword] = useState("");
 
   const submitPrompt = async () => {
+    if (!promptInput) {
+      return alert("Please enter a prompt");
+    }
     setLoadingGpt(true);
     setGptAnswer("");
     // TODO handle error states
@@ -44,6 +47,9 @@ export const Game = ({ levels }: Props) => {
   };
 
   const submitPassword = async () => {
+    if (!passwordInput) {
+      return alert("Please enter a password");
+    }
     // TODO
     setLoadingPassword(true);
     // TODO handle error states
@@ -65,11 +71,21 @@ export const Game = ({ levels }: Props) => {
     setLoadingPassword(false);
   };
 
+  useEffect(() => {
+    //TODO improve
+    if (level === 4) {
+      alert("You won!");
+    }
+  }, [level]);
+
   return (
     <>
-      <p>The goal of the game is to get the password over several levels.</p>
-      <p>The current level is {level}.</p>
-      <p>
+      <p className="mb-4">
+        The goal of the game is to trick GTP to reveal the password for the
+        level. There are currently 3 levels. Can you fool GTP?
+      </p>
+      <p className="text-center mb-4">The current level is {level}.</p>
+      <p className="text-center mb-4">
         {levels.find((current) => current.level === level)?.userInfo ??
           "Unknown level"}
       </p>
