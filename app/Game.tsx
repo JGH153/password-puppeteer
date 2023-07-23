@@ -12,6 +12,8 @@ import {
   PasswordResponseBody,
 } from "./api/password/route";
 import { LevelNoPassword } from "@/lib/levels";
+import LogRocket from "logrocket";
+import { config } from "@/lib/config";
 
 interface Props {
   levels: LevelNoPassword[];
@@ -20,11 +22,11 @@ interface Props {
 export const Game = ({ levels }: Props) => {
   const [passwordInput, setPasswordInput] = useState("");
   const [promptInput, setPromptInput] = useState("");
+  const [lastSubmittedPrompt, setLastSubmittedPrompt] = useState("");
   const [gptAnswer, setGptAnswer] = useState("");
   const [loadingGpt, setLoadingGpt] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
   const [level, setLevel] = useState(1);
-  // copy to url and read upon startup, or use constantly
   const [lastLevelPassword, setLastLevelPassword] = useState("");
 
   const submitPrompt = async () => {
@@ -33,42 +35,51 @@ export const Game = ({ levels }: Props) => {
     }
     setLoadingGpt(true);
     setGptAnswer("");
-    // TODO handle error states
-    const response = await postJsonResponse<GptRequestBody, GptResponseBody>(
-      "/api/gpt",
-      {
-        prompt: promptInput,
-        currentLevel: level,
-        lastLevelPassword,
-      }
-    );
-    setLoadingGpt(false);
-    setGptAnswer(response.response);
+    try {
+      setLastSubmittedPrompt(promptInput);
+      const response = await postJsonResponse<GptRequestBody, GptResponseBody>(
+        "/api/gpt",
+        {
+          prompt: promptInput,
+          currentLevel: level,
+          lastLevelPassword,
+        }
+      );
+      setGptAnswer(response.response);
+    } catch (e) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoadingGpt(false);
+    }
   };
 
   const submitPassword = async () => {
     if (!passwordInput) {
       return alert("Please enter a password");
     }
-    // TODO
     setLoadingPassword(true);
-    // TODO handle error states
-    const response = await postJsonResponse<
-      PasswordRequestBody,
-      PasswordResponseBody
-    >("/api/password", {
-      password: passwordInput,
-      level,
-    });
-    if (response.ok) {
-      setLevel(level + 1);
-      setLastLevelPassword(passwordInput);
-      setPasswordInput("");
-      alert("Correct password!");
-    } else {
-      alert("Wrong password!");
+    try {
+      const response = await postJsonResponse<
+        PasswordRequestBody,
+        PasswordResponseBody
+      >("/api/password", {
+        password: passwordInput,
+        level,
+        lastSubmittedPrompt,
+      });
+      if (response.ok) {
+        setLevel(level + 1);
+        setLastLevelPassword(passwordInput);
+        setPasswordInput("");
+        alert("Correct password!");
+      } else {
+        alert("Wrong password!");
+      }
+    } catch (e) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoadingPassword(false);
     }
-    setLoadingPassword(false);
   };
 
   useEffect(() => {
@@ -77,6 +88,12 @@ export const Game = ({ levels }: Props) => {
       alert("You won!");
     }
   }, [level, levels]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      LogRocket.init(config.logRocketProjectId);
+    }
+  });
 
   return (
     <>

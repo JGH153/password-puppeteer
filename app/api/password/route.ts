@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export interface PasswordRequestBody {
   password: string;
   level: number;
+  lastSubmittedPrompt: string;
 }
 
 export interface PasswordResponseBody {
@@ -15,6 +16,8 @@ export async function POST(request: Request) {
   const requestBody = (await request.json()) as PasswordRequestBody;
   const password = requestBody.password;
   const level = requestBody.level;
+
+  console.log("lastSubmittedPrompt: ", requestBody.lastSubmittedPrompt);
 
   if (!password || password.length === 0) {
     return NextResponse.json<PasswordResponseBody>(
@@ -39,9 +42,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const passwordUppercase = password.toUpperCase();
+  const userPasswordUppercase = password.toUpperCase().trim();
 
-  if (passwordUppercase === currentLevel.password.toUpperCase()) {
+  if (userPasswordUppercase === currentLevel.password.toUpperCase()) {
     return NextResponse.json<PasswordResponseBody>(
       { ok: true },
       { status: 200 }
@@ -49,7 +52,7 @@ export async function POST(request: Request) {
   }
 
   console.log(
-    passwordUppercase,
+    userPasswordUppercase,
     currentLevel.password.toUpperCase(),
     level,
     currentLevel
