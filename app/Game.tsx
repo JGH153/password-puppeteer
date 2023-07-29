@@ -94,7 +94,7 @@ export const Game = ({ levels }: Props) => {
       console.log("Initializing LogRocket");
       LogRocket.init(config.logRocketProjectId);
     }
-  });
+  }, []);
 
   return (
     <>
