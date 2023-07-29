@@ -43,7 +43,10 @@ export async function POST(request: Request) {
       (current) => current.level === requestBody.currentLevel - 1
     )?.password;
 
-    if (lastLevelActualPassword !== requestBody.lastLevelPassword) {
+    if (
+      lastLevelActualPassword?.toLowerCase().trim() !==
+      requestBody.lastLevelPassword?.toLowerCase().trim()
+    ) {
       return NextResponse.json(
         { error: "Wrong last level password" },
         { status: 400 }

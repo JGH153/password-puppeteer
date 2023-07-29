@@ -1,19 +1,18 @@
 "use client";
+import { Skeleton } from "@/components/Skeleton";
+import { Spinner } from "@/components/Spinner";
+import { config } from "@/lib/config";
+import { postJsonResponse } from "@/lib/fetch";
+import { LevelNoPassword } from "@/lib/levels";
+import LogRocket from "logrocket";
 import { useEffect, useState } from "react";
 import { PasswordInput } from "./PasswordInput";
 import { PromptInput } from "./PromptInput";
-import { Spinner } from "@/components/Spinner";
 import { GptRequestBody, GptResponseBody } from "./api/gpt/route";
-import { postJsonResponse } from "@/lib/fetch";
-import { Button } from "@/components/Button";
-import { Skeleton } from "@/components/Skeleton";
 import {
   PasswordRequestBody,
   PasswordResponseBody,
 } from "./api/password/route";
-import { LevelNoPassword } from "@/lib/levels";
-import LogRocket from "logrocket";
-import { config } from "@/lib/config";
 
 interface Props {
   levels: LevelNoPassword[];
@@ -46,8 +45,8 @@ export const Game = ({ levels }: Props) => {
         }
       );
       setGptAnswer(response.response);
-    } catch (e) {
-      alert("Something went wrong. Please try again.");
+    } catch (e: any) {
+      alert("Something went wrong. Please try again. " + e.message);
     } finally {
       setLoadingGpt(false);
     }
@@ -75,8 +74,8 @@ export const Game = ({ levels }: Props) => {
       } else {
         alert("Wrong password!");
       }
-    } catch (e) {
-      alert("Something went wrong. Please try again.");
+    } catch (e: any) {
+      alert("Something went wrong. Please try again. " + e.message);
     } finally {
       setLoadingPassword(false);
     }
@@ -90,7 +89,9 @@ export const Game = ({ levels }: Props) => {
   }, [level, levels]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    const env = process.env.NODE_ENV;
+    if (typeof window !== "undefined" && env == "production") {
+      console.log("Initializing LogRocket");
       LogRocket.init(config.logRocketProjectId);
     }
   });

@@ -6,7 +6,10 @@ export const fetcherSwr = (url: string) =>
     return res.json();
   });
 
-export const getAsJson = async <ReturnType>(url: string, headers?: HeadersInit) => {
+export const getAsJson = async <ReturnType>(
+  url: string,
+  headers?: HeadersInit
+) => {
   const response = await fetch(url, {
     headers: {
       ...headers,
@@ -18,24 +21,32 @@ export const getAsJson = async <ReturnType>(url: string, headers?: HeadersInit) 
 export const postJsonResponse = async <TRequestType, TResponseType>(
   url: string,
   data: TRequestType,
-  headers?: HeadersInit,
+  headers?: HeadersInit
 ): Promise<TResponseType> => {
   const response = await fetch(url, {
     method: "POST",
     headers: { ...headers, "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+  const json = await response.json();
   if (!response.ok) {
     console.error("Error response", response);
+    if ((json as any).error) {
+      throw new Error(
+        `Error ${response.status}: ${response.statusText}. Error message: ${
+          (json as any).error
+        }`
+      );
+    }
     throw new Error(`Error ${response.status}: ${response.statusText}`);
   }
-  return response.json();
+  return json;
 };
 
 export const postOnlyStatus = async <DataType>(
   url: string,
   data: DataType,
-  headers?: HeadersInit,
+  headers?: HeadersInit
 ): Promise<boolean> => {
   const response = await fetch(url, {
     method: "POST",
