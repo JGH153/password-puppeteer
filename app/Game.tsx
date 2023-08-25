@@ -67,10 +67,11 @@ export const Game = ({ levels }: Props) => {
         lastSubmittedPrompt,
       });
       if (response.ok) {
+        const victoryLevel = levels.find((current) => current.level === level);
         setLevel(level + 1);
         setLastLevelPassword(passwordInput);
         setPasswordInput("");
-        alert("Correct password!");
+        alert("Correct password!" + " " + victoryLevel?.victoryMessage);
       } else {
         alert("Wrong password!");
       }
@@ -100,8 +101,8 @@ export const Game = ({ levels }: Props) => {
     <>
       <p className="mb-4">
         We have given GTP a password. The goal of the game is to trick GTP to
-        reveal the password for the level. There are currently 4 levels. Can you
-        fool GTP?
+        reveal the password for the level. There are currently {levels.length}{" "}
+        levels. Can you fool GTP?
       </p>
       <p className="text-center mb-4">The current level is {level}.</p>
       <p className="text-center mb-4">
