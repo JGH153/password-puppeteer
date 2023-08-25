@@ -84,7 +84,7 @@ export const Game = ({ levels }: Props) => {
   useEffect(() => {
     //TODO improve
     if (level === levels.length + 1) {
-      alert("You won!");
+      alert("You won🎉!");
     }
   }, [level, levels]);
 

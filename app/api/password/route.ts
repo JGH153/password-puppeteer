@@ -1,5 +1,6 @@
 import { levels } from "@/lib/levels";
 import { NextResponse } from "next/server";
+import { sql } from "@vercel/postgres";
 
 export interface PasswordRequestBody {
   password: string;
@@ -45,6 +46,9 @@ export async function POST(request: Request) {
   const userPasswordUppercase = password.toUpperCase().trim();
 
   if (userPasswordUppercase === currentLevel.password.toUpperCase()) {
+    // save user prompt
+    await sql`INSERT INTO PROMPT (LEVEL,PROMPT) VALUES (${currentLevel.level}, ${requestBody.lastSubmittedPrompt});`;
+
     return NextResponse.json<PasswordResponseBody>(
       { ok: true },
       { status: 200 }
