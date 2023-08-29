@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     if (passwordCheck.revealPassword) {
       return NextResponse.json({
         response:
-          "Your attempt to get the password was stopped by a second round of GTP",
+          "Your attempt to get the password was stopped by a second round of GPT",
       });
     }
   }

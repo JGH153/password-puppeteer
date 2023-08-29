@@ -12,7 +12,7 @@ export const PromptInput = (props: Props) => {
     <div className={props.className}>
       <label
         htmlFor="message"
-        className="block mb-2 font-medium text-gray-900 dark:text-white"
+        className="block mb-2 font-medium text-white"
       >
         Your prompt:
       </label>
@@ -22,7 +22,7 @@ export const PromptInput = (props: Props) => {
           rows={4}
           value={props.promptInput}
           onChange={(e) => props.setPromptInput(e.target.value)}
-          className="block p-2.5 w-full resize-none rounded-t-lg bg-gray-700 dark:border-gray-600 placeholder-gray-400 text-white focus:outline-none"
+          className="block p-2.5 w-full resize-none rounded-t-lg bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:outline-none"
           placeholder="Write your thoughts here..."
         ></textarea>
         <div className="flex flex-row justify-end p-2 bg-gray-700 rounded-b-lg">

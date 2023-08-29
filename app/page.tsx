@@ -14,6 +14,7 @@ export default function Home() {
       <section className="max-w-2xl flex-1 m-4">
         <h1 className="text-5xl text-center mb-4">Password Puppeteer</h1>
         <Game levels={levelsNoPassword} />
+        <p className="text-center mt-8">Made by Jan Greger Hemb</p>
       </section>
     </main>
   );
