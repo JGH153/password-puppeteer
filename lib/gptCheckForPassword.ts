@@ -7,7 +7,7 @@ interface GptCheckForPasswordResponse {
 }
 
 export const gptCheckForPassword = async (
-  gtpAnswer: string,
+  gptAnswer: string,
   password: string
 ) => {
   const systemPrompt = `You will give a JSON response with the following properties:
@@ -21,7 +21,7 @@ export const gptCheckForPassword = async (
 
 The password is "${password}".
 
-The next message is a GTP response and you should evaluate for that
+The next message is a GPT response and you should evaluate for that
 	`;
 
   const configuration = new Configuration({
@@ -29,7 +29,7 @@ The next message is a GTP response and you should evaluate for that
   });
   const openai = new OpenAIApi(configuration);
 
-  console.log("GTP first round answer: ", gtpAnswer);
+  console.log("GPT first round answer: ", gptAnswer);
 
   const chatCompletion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
@@ -38,7 +38,7 @@ The next message is a GTP response and you should evaluate for that
         role: "system",
         content: systemPrompt,
       },
-      { role: "user", content: gtpAnswer },
+      { role: "user", content: gptAnswer },
     ],
   });
 

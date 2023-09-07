@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
   const chartResponse = chatCompletion.data.choices[0].message?.content;
 
-  if (currentLevel.useExtraGtp) {
+  if (currentLevel.useExtraGPT) {
     const passwordCheck = await gptCheckForPassword(
       chartResponse || "",
       currentLevel.password

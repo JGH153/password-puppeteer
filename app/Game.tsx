@@ -100,9 +100,9 @@ export const Game = ({ levels }: Props) => {
   return (
     <>
       <p className="mb-4">
-        We have given GTP a password. The goal of the game is to trick GTP to
+        We have given GPT a password. The goal of the game is to trick GPT to
         reveal the password for the level. There are currently {levels.length}{" "}
-        levels. Can you fool GTP?
+        levels. Can you fool GPT?
       </p>
       <p className="text-center mb-4">The current level is {level}.</p>
       <p className="text-center mb-4">
