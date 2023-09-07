@@ -107,7 +107,7 @@ export const Game = ({ levels }: Props) => {
       <p className="text-center mb-4">The current level is {level}.</p>
       <p className="text-center mb-4">
         {levels.find((current) => current.level === level)?.userInfo ??
-          "Unknown level"}
+          "No more levels for now"}
       </p>
 
       <PromptInput
